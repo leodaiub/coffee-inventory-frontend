@@ -1,0 +1,15 @@
+div.navigation {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  height: 100%;
+  position: fixed;
+  background-color: red;
+}
+div.logo {
+  background-color: rgb(163, 163, 163);
+}
+
+div.menus {
+  background-color: rgb(185, 238, 241);
+}
