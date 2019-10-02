@@ -1,11 +1,13 @@
 import React from 'react';
 import './App.css';
-import Navigation from './components/navigation/navigation';
+import Routes from './routes.js';
 
 function App() {
   return (
     <div className="App">
-      <Navigation></Navigation>
+       {/* <ErrorBoundary> */}
+      <Routes />
+      {/* </ErrorBoundary> */}
     </div>
   );
 }
