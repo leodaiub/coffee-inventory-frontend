@@ -1,62 +1,80 @@
 import React from 'react';
-import MaterialTable from 'material-table';
-import './sales.css';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
+import SaveIcon from '@material-ui/icons/Add';
+import Fab from '@material-ui/core/Fab';
+import api from '../../services/api';
 
-export default function MaterialTableDemo() {
-  const [state, setState] = React.useState({
-    columns: [
-      { title: 'Produto', field: 'name' },
-      { title: 'Preço de custo', field: 'birthYear', type: 'numeric' },
-      { title: 'Preço de venda', field: 'birthYear', type: 'numeric' },
-      { title: 'Quantidade', field: 'surname', type: 'numeric' },
-    ],
-    data: [
-      { name: 'Mehmet', surname: 'Baran', birthYear: '1987', birthCity: '63' },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-    ],
-  });
+export default class SimpleTable extends React.Component {
+  constructor(props){
+    super(props)
+    this.state ={
+      list: []
+    };
+}
+  async componentDidMount() {
+    const response = await api.get('/sales')
 
-  return (
-    <div className="root">
-    <MaterialTable
-      title="Editable Example"
-      columns={state.columns}
-      data={state.data}
-      editable={{
-        onRowAdd: newData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              const data = [...state.data];
-              data.push(newData);
-              setState({ ...state, data });
-            }, 600);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              const data = [...state.data];
-              data[data.indexOf(oldData)] = newData;
-              setState({ ...state, data });
-            }, 600);
-          }),
-        onRowDelete: oldData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              const data = [...state.data];
-              data.splice(data.indexOf(oldData), 1);
-              setState({ ...state, data });
-            }, 600);
-          }),
-      }}
-    />
-    </div>
-  );
+    this.setState({list: response.data});
+    console.log(this.state.list);
+  }
+
+  handleDelete = async id => {
+    await api.delete(`/sales/${id}/`);
+    await this.props.history.push('/');
+  }
+
+  render(){
+    return (
+      <Paper >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell align="right">Produto</TableCell>
+              <TableCell align="right">Preço</TableCell>
+              <TableCell align="right">Quantidade</TableCell>
+              <Fab onClick={''} size="small" color="primary" aria-label="add">
+                  <AddIcon />
+              </Fab>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.state.list.map(row => (
+              <TableRow key={row._id}>
+                <TableCell component="th" scope="row">
+                  {row.item}
+                </TableCell>
+                <TableCell align="right"><TextField
+                  id="outlined-name"
+                  label="Name"
+                  className={''}
+                  value={row.price}
+                  onChange={''}
+                  margin="normal"
+                  variant="outlined"
+                /></TableCell>
+                <TableCell align="right">R${row.price}</TableCell>
+                <TableCell align="right">{row.quantity}</TableCell>
+                <IconButton onClick={this.handleDelete.bind(this, row._id)} aria-label="delete">
+                  <DeleteIcon />
+                </IconButton>
+                <IconButton onClick={this.handleDelete.bind(this, row._id)} aria-label="delete">
+                  <SaveIcon />
+                </IconButton>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    );
+  }
 }

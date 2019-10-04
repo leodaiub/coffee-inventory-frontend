@@ -13,6 +13,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Logo from './logo/logo';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore';
+import { Link } from 'react-router-dom';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -42,6 +44,10 @@ const useStyles = makeStyles(theme => ({
     marginTop: 50
     
   },
+  link: {
+    textDecoration: 'none',
+    color: 'black',
+  }
 }));
 
 export default function PermanentDrawerLeft(props) {
@@ -52,7 +58,7 @@ export default function PermanentDrawerLeft(props) {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h8" noWrap>
+          <Typography variant="h6" noWrap>
             CAFÉ DO TEATRO COMMUNE
           </Typography>
         </Toolbar>
@@ -71,14 +77,18 @@ export default function PermanentDrawerLeft(props) {
         </div>
         <Divider />
         <List>
-           <ListItem button >
-              <ListItemIcon><AttachMoneyIcon/></ListItemIcon>
-              <ListItemText>VENDAS</ListItemText>
-            </ListItem>
+          <Link className={classes.link} to="/vendas">
+            <ListItem button >
+                <ListItemIcon><AttachMoneyIcon/></ListItemIcon>
+                <ListItemText>VENDAS</ListItemText>
+              </ListItem>
+          </Link>
+          <Link className={classes.link} to="/estoque">
             <ListItem button>
               <ListItemIcon><LocalGroceryStoreIcon /></ListItemIcon>
               <ListItemText>ESTOQUE</ListItemText>
             </ListItem>
+          </Link>
         </List>
         <Divider />
       </Drawer>
