@@ -12,6 +12,7 @@ export default function Routes() {
           <Route exact path="/"><Redirect to="/vendas" /></Route>
           <Route path="/vendas/" exact component={Sales}/>
           <Route path="/estoque/" exact component={Inventory}/>
+          <Route path="/estoque/new"><Redirect to="/estoque" /></Route>
         </Navigation>
       </BrowserRouter>
   );

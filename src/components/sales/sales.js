@@ -7,12 +7,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import Container from '@material-ui/core/Container';
 import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
-import Fab from '@material-ui/core/Fab';
 import api from '../../services/api';
+import New from './New';
 
 export default class SimpleTable extends React.Component {
   constructor(props){
@@ -23,14 +21,15 @@ export default class SimpleTable extends React.Component {
 }
   async componentDidMount() {
     const response = await api.get('/sales')
-
     this.setState({list: response.data});
-    console.log(this.state.list);
   }
 
   handleDelete = async id => {
-    await api.delete(`/sales/${id}/`);
-    await this.props.history.push('/');
+    const r = window.confirm("Quer mesmo apagar esse registro?"); 
+      if(r === true){
+        await api.delete(`/sales/${id}/`);
+        await this.props.history.push('/');
+    }
   }
 
   handleChange = e => {
@@ -41,54 +40,20 @@ export default class SimpleTable extends React.Component {
   handleSubmit = async id => {
     await api.put(`/sales/${id}/`, this.state);
     this.props.history.push('/');
-  }
-
-  handleNew = async e => {
-    console.log(this.state)
-    await api.post(`/sales/`, this.state);
-    this.props.history.push('/');
-  }
-  
+  }  
 
   render(){
     return (
       <Paper >
-        <Container>
-          <TextField
-              id="outlined-name"
-              label="Name"
-              name="itemName"
-              onChange={this.handleChange}
-              margin="normal"
-              variant="outlined"
-            />
-            <TextField
-              id="outlined-name"
-              label="Name"
-              name="price"
-              onChange={this.handleChange}
-              margin="normal"
-              variant="outlined"
-            />
-            <TextField
-              id="outlined-name"
-              label="Name"
-              name="quantity"
-              onChange={this.handleChange}
-              margin="normal"
-              variant="outlined"
-            />
-            <IconButton onClick={this.handleNew} style={{margin:17}} aria-label="add">
-              <AddIcon />
-            </IconButton>
-          </Container>
-        <Table>
+        <New></New>
+        <Table>        
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell align="right">Produto</TableCell>
               <TableCell align="right">Preço</TableCell>
               <TableCell align="right">Quantidade</TableCell>
+              <TableCell align="right">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -124,16 +89,14 @@ export default class SimpleTable extends React.Component {
                   margin="normal"
                   variant="outlined"
                 /></TableCell>
-                <div>
+                <TableCell align="right">
                 <IconButton onClick={this.handleDelete.bind(this, row._id)} aria-label="delete">
                   <DeleteIcon />
-                </IconButton>
-                </div>
-                <div>
+                </IconButton> 
                 <IconButton onClick={this.handleSubmit.bind(this, row._id)} aria-label="delete">
                   <SaveIcon />
                 </IconButton>
-                </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
