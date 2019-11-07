@@ -16,12 +16,16 @@ export default class SimpleTable extends React.Component {
   constructor(props){
     super(props)
     this.state ={
-      list: []
+      list: [],
+      itens: []
     };
 }
   async componentDidMount() {
     const response = await api.get('/sales')
     this.setState({list: response.data});
+    const itens = await api.get('/products');
+    this.setState({itens: itens.data});
+
   }
 
   handleDelete = async id => {
